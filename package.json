@@ -1,0 +1,24 @@
+{
+  "name": "goologin",
+  "version": "0.0.1",
+  "description": "A module to easily integrate google login in your app.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sach2211/GooLogin.git"
+  },
+  "keywords": [
+    "Google",
+    "login",
+    "google-login"
+  ],
+  "author": "sach2211",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sach2211/GooLogin/issues"
+  },
+  "homepage": "https://github.com/sach2211/GooLogin#readme"
+}
