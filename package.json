@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/sach2211/GooLogin/issues"
   },
-  "homepage": "https://github.com/sach2211/GooLogin#readme"
+  "homepage": "https://github.com/sach2211/GooLogin#readme",
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
 }
