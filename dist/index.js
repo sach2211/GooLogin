@@ -1,13 +1,24 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-const get = require('lodash.get');
+"use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var get = require('lodash.get');
 /**
  *
  * Google-Login
  * reference from : https://github.com/google/google-api-javascript-client/blob/master/samples/authSample.html
  */
 
-class GooLogin {
-  constructor(tokenPostURL, postBody, id = "", mode) {
+var GooLogin = function () {
+  function GooLogin(tokenPostURL, postBody) {
+    var id = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
+    var mode = arguments[3];
+
+    _classCallCheck(this, GooLogin);
+
     this.tokenPostURL = tokenPostURL;
     this.postBody = postBody;
     // this.credId = id;
@@ -15,66 +26,70 @@ class GooLogin {
   }
 
   /* Is gapi available */
-  gLogin() {
-    if (get(window, "gapi.auth2")) {
-      let gAuth = window.gapi.auth2.getAuthInstance();
-      let currentUser;
 
-      /* Register a listener to detect a change in login state */
-      gAuth.isSignedIn.listen(loggedIn => {
-        if (loggedIn && this.chosenAccountMatchesLoggedinAccount(gAuth.currentUser.get())) {
-          this.postToken(gAuth.currentUser.get());
-        }
-      });
 
-      /* Is user logged in through the same account he chose in Browser Account Chooser UI ? */
-      if (gAuth.isSignedIn.get() && this.chosenAccountMatchesLoggedinAccount(gAuth.currentUser.get())) {
-        this.postToken(gAuth.currentUser.get());
-      } else {
-        /* User is not logged in through same (or any other) account, open Google login view */
-        /* Show login hint, if applicable (as in case of CM api) */
-        gAuth.signIn({
-          login_hint: id || ""
+  _createClass(GooLogin, [{
+    key: "gLogin",
+    value: function gLogin() {
+      var _this = this;
+
+      if (get(window, "gapi.auth2")) {
+        var gAuth = window.gapi.auth2.getAuthInstance();
+        var currentUser = void 0;
+
+        /* Register a listener to detect a change in login state */
+        gAuth.isSignedIn.listen(function (loggedIn) {
+          if (loggedIn && _this.chosenAccountMatchesLoggedinAccount(gAuth.currentUser.get())) {
+            _this.postToken(gAuth.currentUser.get());
+          }
         });
+
+        /* Is user logged in through the same account he chose in Browser Account Chooser UI ? */
+        if (gAuth.isSignedIn.get() && this.chosenAccountMatchesLoggedinAccount(gAuth.currentUser.get())) {
+          this.postToken(gAuth.currentUser.get());
+        } else {
+          /* User is not logged in through same (or any other) account, open Google login view */
+          /* Show login hint, if applicable (as in case of CM api) */
+          gAuth.signIn({
+            login_hint: id || ""
+          });
+        }
+      } else {
+        console.error("An error in auth2 init");
+        return false;
       }
-    } else {
-      console.error("An error in auth2 init");
+    }
+  }, {
+    key: "chosenAccountMatchesLoggedinAccount",
+    value: function chosenAccountMatchesLoggedinAccount(currentUser) {
+      var profile = currentUser.getBasicProfile();
+      if (!id || profile.getEmail() === id) {
+        return true;
+      }
       return false;
     }
-  }
-
-  chosenAccountMatchesLoggedinAccount(currentUser) {
-    let profile = currentUser.getBasicProfile();
-    if (!id || profile.getEmail() === id) {
-      return true;
-    }
-    return false;
-  }
-
-  postToken(currentUser) {
-    this.postBody.access_token= get(currentUser, "Zi.access_token");
-    agent
-      .post(this.tokenPostURL)
-      .send(this.postBody)
-      .end((err, resp) => {
+  }, {
+    key: "postToken",
+    value: function postToken(currentUser) {
+      this.postBody.access_token = get(currentUser, "Zi.access_token");
+      agent.post(this.tokenPostURL).send(this.postBody).end(function (err, resp) {
         if (!agent.handleErrors(err, resp)) {
-          let basicProfile = currentUser.getBasicProfile();
-          credentials.storeFederatedCredentials(
-            basicProfile.getEmail(),
-            basicProfile.getName(),
-            basicProfile.getImageUrl(),
-            "google"
-          );
+          var basicProfile = currentUser.getBasicProfile();
+          credentials.storeFederatedCredentials(basicProfile.getEmail(), basicProfile.getName(), basicProfile.getImageUrl(), "google");
           success(); // additional tasks in case of success.
           return;
         }
         console.error("Google login posting failed - ", err);
       });
-  }
-};
+    }
+  }]);
 
-module.exports = { GooLogin };
+  return GooLogin;
+}();
 
+;
+
+module.exports = { GooLogin: GooLogin };
 
 },{"lodash.get":2}],2:[function(require,module,exports){
 (function (global){

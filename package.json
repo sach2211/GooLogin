@@ -4,7 +4,7 @@
   "description": "A module to easily integrate google login in your app.",
   "main": "dist/index.js",
   "scripts": {
-    "build": "rm -rf dist && mkdir dist && browserify lib/index.js > dist/index.js && exit 0",
+    "build": "rm -rf dist && mkdir dist && browserify lib/index.js > dist/index.js -t [ babelify --presets [ env ] ] && exit 0",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "babelify": "^8.0.0",
     "browserify": "^14.5.0"
   }
