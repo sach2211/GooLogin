@@ -2,8 +2,9 @@
   "name": "goologin",
   "version": "0.0.1",
   "description": "A module to easily integrate google login in your app.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "rm -rf dist && mkdir dist && browserify lib/index.js > dist/index.js && exit 0",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,6 +23,11 @@
   },
   "homepage": "https://github.com/sach2211/GooLogin#readme",
   "dependencies": {
-    "lodash": "^4.17.4"
+    "lodash.get": "^4.4.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babelify": "^8.0.0",
+    "browserify": "^14.5.0"
   }
 }
